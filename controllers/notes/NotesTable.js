@@ -3,8 +3,8 @@ import client from '../../db_connection.js';
 const TABLE_NAME = "notes";
 
 // Get all notes from database -----------------------------------------------------
-async function getNotes() {
-    const res = await client.query('SELECT * from notes')
+async function getNotes(userId) {
+    const res = await client.query(`SELECT * from notes where "creatorId" = '${userId}'`)
     return res.rows;
   }
   //Delete note form database --------------------------------------------------------
@@ -18,11 +18,11 @@ async function getNotes() {
     } 
   };
   //create a new note and insert into database ---------------------------------------
-  async function createNote(header, content){
+  async function createNote(header, content, userId){
     try {
       await client.query(
-      `INSERT INTO "notes" ("header", "content")  
-       VALUES ($1, $2)`, [header, content]); // sends queries
+      `INSERT INTO "notes" ("header", "content", "creatorId")  
+       VALUES ($1, $2, $3)`, [header, content, userId]); // sends queries
       return true;
   } catch (error) {
       console.error(error.stack);

@@ -41,10 +41,25 @@ async function checkPassword(password){
   } 
 };
 
+async function getUser(email, password){
+  try {
+    var result = await client.query(`SELECT * FROM ${TABLE_NAME} where email = '${email}' and password='${password}'`);
+    if(result.rowCount > 0){
+      console.log(result.rows);
+      return result.rows[0];
+    }
+    return false;
+  } catch (error) {
+      console.error(error.stack);
+      return false;
+  } 
+};
+
 var userTable = {
   createUser,
   isEmailExisting,
   checkPassword,
+  getUser
 }
 
 export default userTable;
