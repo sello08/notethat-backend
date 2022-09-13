@@ -21,7 +21,6 @@ async function isEmailExisting(email){
     if(result.rowCount > 0){
       return true;
     }
-    return false;
   } catch (error) {
       console.error(error.stack);
       return false;
@@ -34,7 +33,6 @@ async function checkPassword(password){
     if(result.rowCount > 0){
       return true;
     }
-    return false;
   } catch (error) {
       console.error(error.stack);
       return false;
