@@ -19,9 +19,17 @@ function authenticateToken(req, res, next) {
 
 function Register(app) {
     app.get('/get-notes', authenticateToken, getNotes);
-    app.post('/note', authenticateToken, postFunction)
-    app.put('/note/:noteId', authenticateToken, updateFunction)
-    app.delete('/note/:noteId', authenticateToken, deleteFunction)
+    app.get('/get-deleted-notes', authenticateToken, getDeletedNotes);
+    app.post('/note', authenticateToken, postFunction);
+    app.put('/note/:noteId', authenticateToken, updateFunction);
+    app.delete('/note/:noteId', authenticateToken, deleteFunction);
+}
+//--------------------------Get Deleted Notes Function----------------------------------------
+
+async function getDeletedNotes(req, res) {
+    const notes = await notesTable.getDeletedNotes(req.user.userId);
+    console.log("req.user", req.user);
+    res.send(notes);
 }
 
 //--------------------------Get Function----------------------------------------

@@ -7,6 +7,11 @@ async function getNotes(userId) {
     const res = await client.query(`SELECT * FROM notes WHERE "isDeleted" = false AND "creator" = '${userId}'`)
     return res.rows;
   }
+  // Get deleted notes from database -----------------------------------------------------
+async function getDeletedNotes(userId) {
+  const res = await client.query(`SELECT * FROM notes WHERE "isDeleted" = true AND "creator" = '${userId}'`)
+  return res.rows;
+}
   //Delete note form database --------------------------------------------------------
   async function deleteNote(id){
     try {
@@ -56,7 +61,8 @@ async function getNotes(userId) {
     getNotes,
     deleteNote,
     createNote,
-    updateNote
+    updateNote,
+    getDeletedNotes
   }
   
   export default notesTable;
