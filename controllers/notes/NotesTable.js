@@ -12,7 +12,7 @@ async function getDeletedNotes(userId) {
   const res = await client.query(`SELECT * FROM notes WHERE "isDeleted" = true AND "creator" = '${userId}'`)
   return res.rows;
 }
-  //Delete note form database --------------------------------------------------------
+  //move note to trash bin --------------------------------------------------------
   async function deleteNote(id){
     try {
         await client.query('UPDATE "notes" SET "isDeleted" = true WHERE "id" =' + id); // sends queries
@@ -22,8 +22,18 @@ async function getDeletedNotes(userId) {
         return false;
     } 
   };
- /* //Delete note form database --------------------------------------------------------
-  async function deleteNote(id){
+  //move note back --------------------------------------------------------
+  async function returnNote(id){
+    try {
+        await client.query('UPDATE "notes" SET "isDeleted" = false WHERE "id" =' + id); // sends queries
+        return true;
+    } catch (error) {
+        console.error(error.stack);
+        return false;
+    } 
+  };
+  //Delete note form database --------------------------------------------------------
+  async function deleteNoteTotally(id){
     try {
         await client.query('DELETE FROM "notes" WHERE "id" =' + id); // sends queries
         return true;
@@ -31,7 +41,7 @@ async function getDeletedNotes(userId) {
         console.error(error.stack);
         return false;
     } 
-  }; */
+  }; 
   //create a new note and insert into database ---------------------------------------
   async function createNote(header, content, userId){
     try {
@@ -62,7 +72,9 @@ async function getDeletedNotes(userId) {
     deleteNote,
     createNote,
     updateNote,
-    getDeletedNotes
+    getDeletedNotes,
+    deleteNoteTotally,
+    returnNote
   }
   
   export default notesTable;

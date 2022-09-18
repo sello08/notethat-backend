@@ -23,6 +23,8 @@ function Register(app) {
     app.post('/note', authenticateToken, postFunction);
     app.put('/note/:noteId', authenticateToken, updateFunction);
     app.delete('/note/:noteId', authenticateToken, deleteFunction);
+    app.delete('/note2/:noteId', authenticateToken, returnNoteFunction);
+    app.delete('/note1/:noteId', authenticateToken, deleteNoteFunction);
 }
 //--------------------------Get Deleted Notes Function----------------------------------------
 
@@ -67,7 +69,7 @@ async function updateFunction(req, res) {
     }
 }
 
-//--------------------------Delete Function----------------------------------------
+//--------------------------Move Note to trash Function----------------------------------------
 
 
 async function deleteFunction(req, res){
@@ -77,6 +79,34 @@ async function deleteFunction(req, res){
         })
     }else{
        const deleted = await notesTable.deleteNote(req.params.noteId)
+        res.send(deleted);
+    }
+}
+
+//--------------------------Move Note back----------------------------------------
+
+
+async function returnNoteFunction(req, res){
+    if (!req.params.noteId) {
+        res.send({
+            message: "Note id must be given!"
+        })
+    }else{
+       const deleted = await notesTable.returnNote(req.params.noteId)
+        res.send(deleted);
+    }
+}
+
+//--------------------------Delete Not Totally Function ----------------------------------------
+
+
+async function deleteNoteFunction(req, res){
+    if (!req.params.noteId) {
+        res.send({
+            message: "Note id must be given!"
+        })
+    }else{
+       const deleted = await notesTable.deleteNoteTotally(req.params.noteId)
         res.send(deleted);
     }
 }
